@@ -10,7 +10,7 @@ func generateTrees(n int) []*TreeNode {
 }
 
 func generateBSTree(start,end int) []*TreeNode {
-	tree := []*TreeNode
+	tree := []*TreeNode{}
 	if start > end {
 		tree = append(tree,nil)
 		return tree
@@ -26,10 +26,10 @@ func generateBSTree(start,end int) []*TreeNode {
 					Left : l,
 					Right :r,
 				}
+				tree = appen(tree,root)
 			}
 		}
-
-		return tree
 	}
 
+	return tree
 }
