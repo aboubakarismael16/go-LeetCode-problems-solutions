@@ -15,7 +15,7 @@ func guessNumber(n int) int {
 		}
 	}
 	
-	return res
+	return -1
 }
 
 func guess(num int) int;
