@@ -1,5 +1,7 @@
 package LeetCode_Binary_Search
 
+
+//first method
 func findMin(nums []int) int {
 	if nums == nil || len(nums) == 0 {
 		return -1
@@ -21,4 +23,17 @@ func findMin(nums []int) int {
 	}
 
 	return nums[left]
+}
+
+//second method
+
+func findMin2(nums []int) int {
+	min := nums[0]
+	for _,num := range nums[1:] {
+		if min > num {
+			min = num
+		}
+	}
+
+	return min
 }

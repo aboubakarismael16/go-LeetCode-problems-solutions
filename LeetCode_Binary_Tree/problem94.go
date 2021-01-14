@@ -7,8 +7,8 @@ func inOrderTraversal(root *TreeNode) []int  {
 	}
 
 	var res []int
-	res = append(res,inOrderTraversal(root.Left))
+	res = append(res,inOrderTraversal(root.Left)...)
 	res = append(res,root.Val)
-	res = append(res,inOrderTraversal(root.Right))
+	res = append(res,inOrderTraversal(root.Right)...)
 	return res
 }
