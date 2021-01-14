@@ -14,5 +14,5 @@ func isValidBSTHelper(root *TreeNode,min,max int) bool {
 	}
 
 	return isValidBSTHelper(root.Left,min,root.Val-1) &&
-	       isValidBSTHelper(root.Right,root.Val,max)
+	       isValidBSTHelper(root.Right,root.Val+1,max)
 }
