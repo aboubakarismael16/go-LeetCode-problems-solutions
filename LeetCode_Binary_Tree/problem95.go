@@ -26,7 +26,7 @@ func generateBSTree(start,end int) []*TreeNode {
 					Left : l,
 					Right :r,
 				}
-				tree = appen(tree,root)
+				tree = append(tree,root)
 			}
 		}
 	}
