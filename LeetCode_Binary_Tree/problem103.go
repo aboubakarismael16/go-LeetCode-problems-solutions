@@ -1,7 +1,7 @@
 package LeetCode_Binary_Tree
 
-import "fmt"
 
+// first method 
 
 func zigzagLevelOrder(root *TreeNode) [][]int {
 	res := [][]int{}
@@ -35,11 +35,9 @@ func zigzagLevelOrder(root *TreeNode) [][]int {
         var levelFinal []int
         if LeftToRight {
             levelFinal = level
-
         } else {
             for i := len(level) -1; i >= 0; i--{
                 levelFinal = append(levelFinal,level[i])
-
             }
         }
         if len(levelFinal) > 0 {
@@ -51,12 +49,29 @@ func zigzagLevelOrder(root *TreeNode) [][]int {
 
 }
 
-func main() {
-	l1 := TreeNode{
-		Val : 3,
-		Left : nil,
-		Right : nil,
+// second method : recursive
+
+func zigzagLevelOrder0(root *TreeNode) [][]int {
+	res := [][]int{}
+	search(root,0,&res)
+	return res
+}
+
+func search(node *TreeNode, level int,res *[][]int)  {
+	if node == nil {
+		return
 	}
 
-	fmt.Println(zigzagLevelOrder(&l1))
+	currLevel := level + 1
+	for len(*res) < currLevel {
+		*res = append(*res,[]int{})
+	}
+
+	if level % 2 == 0 {
+		(*res)[level] = append((*res)[level],node.Val)
+	} else {
+		(*res)[level] = append([]int{node.Val},(*res)[level]...)
+	}
+	search(node.Left,currLevel,res)
+	search(node.Right,currLevel,res)
 }
