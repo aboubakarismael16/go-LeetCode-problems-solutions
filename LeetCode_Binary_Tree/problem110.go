@@ -5,8 +5,8 @@ func isBalanced(root *TreeNode) bool  {
 		return true
 	}
 
-	return abs(heighHelper(root.Left,0) - heighHelper(root.Right,0)) < 2 && 
-					isBalanced(root.Left) && isBalanced(root.Right)
+	return abs(heighHelper(root.Left,0)-heighHelper(root.Right,0)) < 2 &&
+			isBalanced(root.Left) && isBalanced(root.Right)
 }
 
 func heighHelper(root *TreeNode,heigh int) int  {
@@ -14,7 +14,8 @@ func heighHelper(root *TreeNode,heigh int) int  {
 		return heigh
 	}
 
-	return max(heighHelper(root.Left,heigh + 1),heighHelper(root.Right,heigh + 1))
+	return max(heighHelper(root.Left,heigh+1),heighHelper(root.Right,heigh+1))
+	
 }
 
 func abs(a int) int  {
