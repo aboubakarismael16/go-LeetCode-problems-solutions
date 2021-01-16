@@ -7,7 +7,7 @@ func flatten(root *TreeNode)  {
 		} else {
 			left := root.Left
 			for left.Right != nil {
-				left = root.Left
+				left = left.Right
 			}
 			left.Right = root.Right
 			root.Right = root.Left
