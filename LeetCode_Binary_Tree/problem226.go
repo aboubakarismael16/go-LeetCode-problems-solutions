@@ -5,7 +5,7 @@ func invertTree(root *TreeNode) *TreeNode {
 		return nil
 	}
 
-	temp := root.left
+	temp := root.Left
 	root.Left = root.Right
 	root.Right = temp
 
