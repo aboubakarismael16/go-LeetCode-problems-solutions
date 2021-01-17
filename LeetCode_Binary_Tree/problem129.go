@@ -22,5 +22,5 @@ func sumNumberHelper(root *TreeNode,num int) int  {
 	sum += sumNumberHelper(root.Left,num)
 	sum += sumNumberHelper(root.Right,num)
 
-	return sum 
+	return sum
 }

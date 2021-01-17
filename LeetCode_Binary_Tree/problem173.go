@@ -34,3 +34,7 @@ func (this *BSTIterator) Next() int {
     
     return -1
 }
+
+func (this *BSTIterator) HasNext() bool {
+    return this.index < len(this.values)
+}

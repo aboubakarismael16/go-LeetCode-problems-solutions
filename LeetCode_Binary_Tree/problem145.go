@@ -1,12 +1,7 @@
 package LeetCode_Binary_Tree
 
-type treeNode struct {
-	Val int
-	Left *treeNode
-	Right *treeNode
-}
 
-func postOrderTraversal(root *treeNode) []int  {
+func postOrderTraversal(root *TreeNode) []int  {
 	if root == nil {
 		return nil
 	}
