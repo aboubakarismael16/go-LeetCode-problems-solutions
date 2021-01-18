@@ -5,7 +5,7 @@ type Node struct {
 	Children []*Node
 }
 
-func levelOrder2(root *Node) [][]int  {
+func levelOrder(root *Node) [][]int  {
 	res := [][]int{}
 	if root == nil {
 		return res 
@@ -30,10 +30,7 @@ func levelOrder2(root *Node) [][]int  {
 		if len(level) > 0 {
 			res = append(res,level)
 		}
-		
-		
 	}
-
 
 	return res	
 }

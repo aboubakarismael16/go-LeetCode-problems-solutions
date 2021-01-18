@@ -2,14 +2,13 @@ package LeetCode_Binary_Tree
 
 import "strconv"
 
-func ninaryTreePath(root *TreeNode) []string {
+func binaryTreePaths(root *TreeNode) []string {
 	res := []string{}
+
 	if root == nil {
 		return res
 	}
-
 	helper(root,"",&res)
-
 	return res
 }
 
