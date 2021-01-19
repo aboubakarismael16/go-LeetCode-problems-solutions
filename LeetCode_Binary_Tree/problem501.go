@@ -5,10 +5,10 @@ func findMode(root *TreeNode) []int {
 	if root == nil {
 		return res
 	}
-	
+
 	dic := make(map[int]int)
 	inorder(root,&dic)
-	max := 0 
+	max := 0
 	for _,v := range dic {
 		if v > max {
 			max = v
@@ -25,7 +25,7 @@ func findMode(root *TreeNode) []int {
 
 func inorder(root *TreeNode, dic *map[int]int)  {
 	if root == nil {
-		return 
+		return
 	}
 
 	inorder(root.Left,dic)

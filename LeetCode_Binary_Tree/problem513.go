@@ -1,23 +1,22 @@
 package LeetCode_Binary_Tree
 
 func findBottomLeftValue(root *TreeNode) int {
+	res := -1
 	if root == nil {
-		return -1
+		return res
 	}
 
 	var q []*TreeNode
 	q = append(q,root)
-	res := -1
-
 	for len(q) > 0 {
-		length := len(q)
+		lenght := len(q)
 		level := []int{}
 
-		for i := 0; i < length ; i++ {
+		for i := 0; i< lenght; i++ {
 			node := q[0]
 			q = q[1:]
+			
 			level = append(level,node.Val)
-
 			if node.Left != nil {
 				q = append(q,node.Left)
 			}
