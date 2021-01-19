@@ -1,3 +1,6 @@
+package LeetCode_Array
+
+
 func maxProfit(prices []int) int {
 	if prices == nil || len(prices) == 0 {
 		return 0

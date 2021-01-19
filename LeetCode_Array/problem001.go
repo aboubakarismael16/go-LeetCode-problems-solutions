@@ -1,4 +1,5 @@
-package LeetCode
+package LeetCode_Array
+
 
 func TwoSum(nums []int,target int) []int  {
 	res :=[]int{-1,-1}

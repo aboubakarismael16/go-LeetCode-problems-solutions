@@ -1,3 +1,6 @@
+package LeetCode_Array
+
+
 func findTheDifference(s string,t string) byte {
 	var res byte
 	if len(s) >= len(t) {
