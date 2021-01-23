@@ -1,3 +1,6 @@
+package LeetCode_Binary_Search
+
+
 func searchRange(nums []int,target int) []int {
 	
 	return []int{searchRangeFirst(nums,target),searchRangeLast(nums,target)}
