@@ -21,7 +21,7 @@ func isPalindrome(head *ListNode) bool {
 
 	if fast.Next == nil {
 		left = pre
-		rgiht = slow.Next
+		right = slow.Next
 	} else {
 		right = slow.Next
 		slow.Next = pre

@@ -1,6 +1,6 @@
 package LeetCode_Linked_List
 
-func getIntersectionNode(headA,headB *listNode) *ListNode {
+func getIntersectionNode(headA,headB *ListNode) *ListNode {
 	if headA == nil || headB == nil {
 		return nil
 	}
