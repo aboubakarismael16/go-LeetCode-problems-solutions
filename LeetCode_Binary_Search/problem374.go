@@ -8,7 +8,7 @@ func guessNumber(n int) int {
 
 		if res == 0 {
 			return mid
-		} else if res == n {
+		} else if res == -1 {
 			right = mid -1
 		} else {
 			left = mid +1

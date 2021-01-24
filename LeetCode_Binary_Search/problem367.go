@@ -15,9 +15,9 @@ func isPerfectSquare(num int) bool {
 			return true
 		} else if mid == num / mid && num % mid > 0 {
 			left = mid +1
-		} else if mid > num / mid {
+		} else if mid < num / mid {
 			left = mid +1
-		} else if mid < num /mid {
+		} else if mid > num /mid {
 			right = mid - 1
 		}
 	}

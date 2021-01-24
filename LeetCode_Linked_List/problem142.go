@@ -1,5 +1,10 @@
 package LeetCode_Linked_List
 
+//		    s
+//          t    f       
+//head = [3,2,0,-4], pos = 1
+//        h
+
 func detectCycle(head *ListNode) *ListNode {
 	if head == nil {
 		return nil

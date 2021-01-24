@@ -10,7 +10,7 @@ func search(nums []int,target int) int  {
 		mid := left + (right - left) /2
 		if nums[mid] == target {
 			return mid
-		} else if nums[mid] > left {
+		} else if nums[mid] > target {
 			right = mid -1
 		} else {
 			left = mid + 1
