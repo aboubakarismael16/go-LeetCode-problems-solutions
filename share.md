@@ -1,30 +1,1260 @@
-# liste
+#LeetCode Probelms Resolutions
 
-## 1. liste1
+## LeetCode Binary Tree Search
 
-[leetcode](http://leetcode.com)
-
-``` go
-func twoSum(nums []int,target int) []int {
-	m := make(map[int]int)
-
- 	for i := 0; i <len(nums)  ; i++ {
-  	another := target - nums[i]
-
-		if _,ok := m[another]; ok {
-			return []int{m[another],i}
-		}
-		m[nums[i]] = i
+###[problem94](https://leetcode.com/problems/binary-tree-inorder-traversal/)
+```go
+func inOrderTraversal(root *TreeNode) []int  {
+	if root == nil {
+		return nil
 	}
-	return nil
-}
 
-func main() {
-	nums := []int{12,34,5,6,11}
-	target := 11
-	fmt.Println(twoSum(nums,target))
-
+	var res []int
+	res = append(res,inOrderTraversal(root.Left)...)
+	res = append(res,root.Val)
+	res = append(res,inOrderTraversal(root.Right)...)
+	return res
 }
 
 ```
 
+###[problem95](https://leetcode.com/problems/unique-binary-search-trees-ii/)
+```go
+func generateTrees(n int) []*TreeNode {
+	if n == 0 {
+		return []*TreeNode{}
+	}
+
+	return generateBSTree(1,n)
+}
+
+func generateBSTree(start,end int) []*TreeNode {
+	tree := []*TreeNode{}
+	if start > end {
+		tree = append(tree,nil)
+		return tree
+	}
+	for i := start; i <= end; i++ {
+		left := generateBSTree(start,i-1)
+		right := generateBSTree(i+1,end)
+
+		for _,l := range left {
+			for _,r := range right {
+				root := &TreeNode{
+					Val : i,
+					Left : l,
+					Right :r,
+				}
+				tree = append(tree,root)
+			}
+		}
+	}
+
+	return tree
+}
+
+```
+
+###[problem98](https://leetcode.com/problems/validate-binary-search-tree/)
+```go
+import "math"
+
+
+func isValidBST(root *TreeNode) bool  {
+	return isValidBSTHelper(root,math.MinInt32,math.MaxInt32)
+
+}
+
+func isValidBSTHelper(root *TreeNode,min,max int) bool {
+	if root == nil {
+		return true
+	}
+
+	return isValidBSTHelper(root.Left,min,root.Val-1) &&
+	       isValidBSTHelper(root.Right,root.Val+1,max)
+}
+
+```
+
+###[problem100](https://leetcode.com/problems/same-tree/)
+```go
+func isSameTree(p *TreeNode, q *TreeNode) bool {
+    return isSameTreeHelper(p,q,true)
+}
+
+func isSameTreeHelper(p *TreeNode, q *TreeNode,res bool) bool {
+    if p == nil && q == nil {
+        return res
+    } else if (p == nil && q != nil) || (p != nil && q == nil) || p.Val != q.Val {
+        return false
+    }
+    
+    return isSameTreeHelper(p.Left,q.Left,res) && isSameTreeHelper(p.Right,q.Right,res)
+}
+
+```
+
+###[problem101](https://leetcode.com/problems/symmetric-tree/)
+```go
+func isSymmetric(root *TreeNode) bool {
+    if root == nil {
+        return true
+    }  
+    if root.Left == nil && root.Right == nil {
+        return true
+    }
+    if root.Left == nil || root.Right == nil {
+        return false
+    }
+    if root.Left.Val != root.Right.Val {
+        return false
+    }
+    
+    var q []*TreeNode
+    q = append(q,root.Left)
+    q = append(q,root.Right)
+    
+    for len(q) > 0 {
+        lenght := len(q)
+        level := []int{}
+        
+        for i := 0; i<lenght; i++ {
+            node := q[0]
+            var nodeVal int
+            if node != nil {
+                nodeVal = node.Val
+                q = append(q,node.Left)
+                q = append(q,node.Right)
+            }
+            
+            level = append(level,nodeVal)
+            q = q[1:]
+        }
+        
+        left,right := 0,len(level) - 1
+        for left < right {
+            if level[left] != level[right] {
+                return false
+            }
+            left++
+            right--
+        }
+    }
+    return true
+}
+
+```
+
+###[problem102](https://leetcode.com/problems/binary-tree-level-order-traversal/)
+```go
+
+//first method
+func levelOrder(root *TreeNode) [][]int  {
+	res := [][]int{}
+	if root == nil {
+		return res
+	}
+
+	var q []*TreeNode
+	q = append(q,root)
+
+	for len(q) > 0 {
+		lenght := len(q)
+		level := []int{}
+
+		for i := 0 ; i < lenght; i++ {
+			node := q[0]
+			q = q[1:]
+			level = append(level,node.Val)
+
+			if node.Left != nil {
+				q = append(q,node.Left)
+			}
+			if node.Right != nil {
+				q = append(q,node.Right)
+			}
+
+			for len(level) > 0 {
+				res = append(res,level)
+			}
+		}
+	}
+
+	return res
+}
+
+// second method 
+func levelOrder(root *TreeNode) [][]int {
+    levels := [][]int{}
+    dfsLevel(root,-1,&levels) // recursive function
+    return levels
+}
+
+// recursive function
+func dfsLevel(node *TreeNode,level int,res *[][]int) {
+    if node == nil {
+        return 
+    }
+    
+    currLevel := level + 1
+    for len(*res) <= currLevel {
+        *res = append(*res,[]int{})
+        
+    }
+    (*res)[currLevel] = append((*res)[currLevel],node.Val)
+    dfsLevel(node.Left,currLevel,res)
+    dfsLevel(node.Right,currLevel,res)
+}
+
+```
+
+###[problem103](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/)
+```go
+func zigzagLevelOrder(root *TreeNode) [][]int {
+	res := [][]int{}
+	if root == nil {
+		return res
+	}
+
+	LeftToRight := true
+
+	var q []*TreeNode
+	q = append(q,root)
+
+	for len(q) > 0 {
+		lenght := len(q)
+		level := []int{}
+
+		for i := 0; i < lenght; i++ {
+			node := q[0]
+			q = q[1:]
+            
+            level = append(level,node.Val)
+
+			if node.Left != nil {
+				q = append(q,node.Left)
+			}
+			if node.Right != nil {
+				q = append(q,node.Right)
+            } 
+        }
+
+        var levelFinal []int
+        if LeftToRight {
+            levelFinal = level
+        } else {
+            for i := len(level) -1; i >= 0; i--{
+                levelFinal = append(levelFinal,level[i])
+            }
+        }
+        if len(levelFinal) > 0 {
+            res = append(res,levelFinal)
+        }
+        LeftToRight = !LeftToRight
+    }
+	return res
+
+}
+
+// second method : recursive
+
+func zigzagLevelOrder0(root *TreeNode) [][]int {
+	res := [][]int{}
+	search(root,0,&res)
+	return res
+}
+
+func search(node *TreeNode, level int,res *[][]int)  {
+	if node == nil {
+		return
+	}
+
+	currLevel := level + 1
+	for len(*res) < currLevel {
+		*res = append(*res,[]int{})
+	}
+
+	if level % 2 == 0 {
+		(*res)[level] = append((*res)[level],node.Val)
+	} else {
+		(*res)[level] = append([]int{node.Val},(*res)[level]...)
+	}
+	search(node.Left,currLevel,res)
+	search(node.Right,currLevel,res)
+}
+
+```
+
+###[problem104](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
+```go
+func maxDepth(root *TreeNode) int {
+    depth := 0
+    return findMax(root,depth)
+}
+
+func findMax(root *TreeNode,depth int) int {
+    if root == nil {
+        return depth
+    }
+    
+    return max(findMax(root.Left,depth + 1),findMax(root.Right,depth + 1))
+}
+
+func max(a,b int) int {
+    if a > b {
+        return a
+    } else {
+        return b
+    }
+}
+
+```
+
+###[problem105](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+```go
+func buildTree(preorder []int,inorder []int) *TreeNode {
+	if preorder == nil || inorder == nil {
+		return nil
+	}	
+
+	return buildTreeHelper(preorder,inorder)
+}
+
+func buildTreeHelper(preorder []int,inorder []int) *TreeNode {
+	if len(preorder) == 0 || len(inorder) ==  0 {
+		return nil
+	}
+
+	rootVal := preorder[0]
+	index := 0
+	for i,v := range inorder {
+		if v == rootVal {
+			index = i
+		}
+	}
+
+	root :=&TreeNode{}
+	root.Val = rootVal
+	root.Left  = buildTreeHelper(preorder[1:index+1],inorder[:index])
+	root.Right = buildTreeHelper(preorder[index+1:],inorder[index+1:])
+
+	return root
+	
+}
+
+```
+
+###[problem106](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+```go
+func buildTree(inorder []int, postorder []int) *TreeNode {
+    return buildTreeHelper(inorder,postorder)
+}
+
+func buildTreeHelper(inorder []int, postorder []int) *TreeNode {
+    if len(inorder) == 0 || len(postorder) == 0 {
+        return nil
+    }
+    
+    rootVal := postorder[len(postorder)-1]
+    index := 0
+    for i,v := range inorder {
+        if v == rootVal {
+            index = i
+        }
+    }
+    
+    root := &TreeNode{}
+    root.Val = rootVal
+    root.Left = buildTreeHelper(inorder[:index] , postorder[:index] )
+    root.Right = buildTreeHelper(inorder[index+1:] , postorder[index:len(postorder)-1] )
+    
+    return root
+}
+
+
+```
+
+###[problem107](https://leetcode.com/problems/binary-tree-level-order-traversal-ii/)
+```go
+func levelOrderBottom(root *TreeNode) [][]int {
+	res := [][]int{}
+	if root == nil {
+		return res
+	}
+
+	var q []*TreeNode
+	q = append(q,root)
+	for len(q) > 0 {
+		lenght := len(q)
+		level := []int{}
+
+		for i := 0; i < lenght ; i++ {
+			node := q[0]
+			q = q[1:]
+
+			level = append(level,node.Val)
+			if node.Left != nil {
+				q = append(q,node.Left)
+			}
+			if node.Right != nil {
+				q = append(q,node.Right)
+			}
+		}
+		if len(level) > 0 {
+			res = append(res,level)
+		}
+	}
+	result := [][]int{}
+	for i := len(res)-1; i >= 0; i-- {
+		result = append(result,res[i])
+	}
+
+	return result
+}
+
+
+```
+
+###[problem108](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/)
+```go
+func sortArrayToBST(nums []int) *TreeNode {
+	if nums == nil || len(nums) == 0 {
+		return nil
+	}
+
+	if len(nums) == 1 {
+		root := &TreeNode{}
+		root.Val = nums[0]
+		return root
+	}
+
+	mid := len(nums) / 2
+	root := &TreeNode{}
+	root.Val = nums[mid]
+	root.Left = sortArrayToBST(nums[:mid])
+	root.Right = sortArrayToBST(nums[mid+1:])
+	return root
+	
+}
+
+
+
+```
+
+###[problem109](FindLongString.gohttps://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/)
+
+``` go
+func sortedListToBST(head *ListNode) *TreeNode {
+    if head == nil {
+		return nil
+	}
+	//           h
+    //head =   [-10,-3,0,5,9]
+    //                  h
+    //output = [0,-3,9,-10,null,5]
+	if head.Next == nil && head != nil {
+		return &TreeNode {
+			Val : head.Val,
+			Left : nil,
+			Right : nil,
+		}
+	}
+
+	middleNode,preNode := middleNodeAndPreNode(head)
+	if middleNode == nil {
+		return nil
+	}
+	if preNode != nil {
+		preNode.Next = nil
+	}
+	if middleNode == head {
+		head = nil
+	}
+
+	return &TreeNode{
+		Val : middleNode.Val,
+		Left : sortedListToBST(head),
+		Right : sortedListToBST(middleNode.Next),
+	}
+}
+
+func middleNodeAndPreNode(head *ListNode) (middle,pre *ListNode)  {
+	if head == nil || head.Next == nil {
+		return nil,head
+	}	
+
+	p1,p2 := head,head
+	for p2.Next != nil && p2.Next.Next != nil {
+		pre = p1
+		p1 = p1.Next
+		p2 = p2.Next.Next
+	}
+
+	return p1,pre
+}
+
+//           p1
+//           p2         
+//head =   [-10,-3,0,5,9]
+//          pre       
+//output = [0,-3,9,-10,null,5]
+
+```
+
+
+###[problem110](https://leetcode.com/problems/balanced-binary-tree/)
+```go
+func isBalanced(root *TreeNode) bool  {
+	if root == nil {
+		return true
+	}
+
+	return abs(heighHelper(root.Left,0)-heighHelper(root.Right,0)) < 2 &&
+			isBalanced(root.Left) && isBalanced(root.Right)
+}
+
+func heighHelper(root *TreeNode,heigh int) int  {
+	if root == nil {
+		return heigh
+	}
+
+	return max(heighHelper(root.Left,heigh+1),heighHelper(root.Right,heigh+1))
+	
+}
+
+func abs(a int) int  {
+	if a < 0 {
+		return 0 -  a 
+	}
+	return a
+}
+
+func max(a,b int) int {
+	if  a < b {
+		return b
+	}
+	return a
+}
+
+```
+
+###[problem111](https://leetcode.com/problems/minimum-depth-of-binary-tree/)
+```go
+func minDepth(root *TreeNode) int  {
+	depth := 0
+	return findMin(root,depth)
+}
+
+func findMin(root *TreeNode,depth int) int  {
+	if root == nil {
+		return depth
+	}
+	if root.Left != nil && root.Right != nil {
+		return min(findMin(root.Left,depth),findMin(root.Right,depth)) + 1
+	} else if root.Left == nil {
+		return findMin(root.Right,depth) + 1
+	} else if root.Right == nil {
+		return findMin(root.Left,depth) + 1
+	} else {
+		return depth
+	}
+}
+
+func min(a,b int) int  {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+```
+
+###[problem112](https://leetcode.com/problems/path-sum/)
+```go
+func hasPathSum(root *TreeNode, sum int) bool {
+   if root == nil {
+       return false
+   }
+
+   if root.Val == sum && root.Left == nil && root.Right == nil {
+       return true
+   }
+
+   return hasPathSum(root.Left,sum-root.Val) || hasPathSum(root.Right,sum-root.Val)
+}
+
+```
+
+###[problem114](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
+```go
+func flatten(root *TreeNode)  {
+	for root != nil {
+		if root.Left == nil {
+			root = root.Right
+		} else {
+			left := root.Left
+			for left.Right != nil {
+				left = left.Right
+			}
+			left.Right = root.Right
+			root.Right = root.Left
+			root.Left = nil
+			root = root.Right
+		}
+	}
+	
+}
+
+```
+
+###[problem129](https://leetcode.com/problems/sum-root-to-leaf-numbers/)
+```go
+func sumNumbers(root *TreeNode) int  {
+	res := 0
+	if root == nil {
+		return res
+	}
+
+	return sumNumberHelper(root,0)
+}
+
+func sumNumberHelper(root *TreeNode,num int) int  {
+	if root == nil {
+		return 0
+	}
+	num = root.Val + num * 10
+	if root.Left == nil && root.Right == nil {
+		return num 
+	}
+
+	sum := 0
+	sum += sumNumberHelper(root.Left,num)
+	sum += sumNumberHelper(root.Right,num)
+
+	return sum
+}
+
+```
+
+###[problem144](https://leetcode.com/problems/binary-tree-preorder-traversal/)
+```go
+func preOrderTraversal(root *treeNode) []int  {
+	if root == nil {
+		return nil
+	}
+
+	res := []int{}
+	res = append(res,root.Val)
+	res = append(res,preOrderTraversal(root.Left)...)
+	res = append(res,preOrderTraversal(root.Right)...)
+
+	return res
+}
+
+
+```
+
+###[problem145](https://leetcode.com/problems/binary-tree-postorder-traversal/)
+```go
+func postOrderTraversal(root *TreeNode) []int  {
+	if root == nil {
+		return nil
+	}
+
+	var res []int
+	res = append(res,postOrderTraversal(root.Left)...)
+	res = append(res,postOrderTraversal(root.Right)...)
+	res = append(res,root.Val)
+
+	return res
+}
+
+```
+
+###[problem173](https://leetcode.com/problems/binary-search-tree-iterator/)
+```go
+type BSTIterator struct {
+    values []int
+    index int
+}
+
+
+func Constructor(root *TreeNode) BSTIterator {
+    values := make([]int,0)
+   
+    inorder(root,&values)
+    return BSTIterator{
+        values : values,
+        index :0,
+    }
+}
+
+func inorder(root *TreeNode, values *[]int) {
+    if root == nil {
+        return
+    }
+    inorder(root.Left,values)
+    *values = append(*values,root.Val)
+    inorder(root.Right,values)
+}
+
+func (this *BSTIterator) Next() int {
+    if this.HasNext() {
+        val := this.values[this.index]
+        this.index++
+        return val
+    }
+    
+    return -1
+}
+
+func (this *BSTIterator) HasNext() bool {
+    return this.index < len(this.values)
+}
+
+
+```
+
+###[problem199](https://leetcode.com/problems/binary-tree-right-side-view/)
+```go
+func rightSideView(root *TreeNode) []int {
+	res := []int{}
+	if root == nil {
+		return res
+	}
+
+	var q []*TreeNode
+	q = append(q,root)
+	for len(q) > 0 {
+		lenght := len(q)
+		level := []int{}
+
+		for i := 0; i<lenght; i++ {
+			node := q[0]
+			q = q[1:]
+
+			level = append(level,node.Val)
+			if node.Left != nil {
+				q = append(q,node.Left)
+			}
+			if node.Right != nil {
+				q = append(q,node.Right)
+			}
+		}
+		if len(level) > 0 {
+			res = append(res,level[len(level)-1])
+		}
+	}
+
+	return res
+	
+}
+
+```
+
+###[problem226](https://leetcode.com/problems/invert-binary-tree/)
+```go
+func invertTree(root *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
+	}
+
+	temp := root.Left
+	root.Left = root.Right
+	root.Right = temp
+
+	invertTree(root.Left)
+	invertTree(root.Right)
+
+	return root
+}
+
+```
+
+###[problem235](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+```go
+func lowestCommonAncestor(root,p,q *TreeNode) *TreeNode {
+	if root.Val > p.Val && root.Val > q.Val {
+		return lowestCommonAncestor(root.Left,p,q)
+	}
+	if root.Val < p.Val && root.Val < q.Val {
+		return lowestCommonAncestor(root.Right,p,q)
+	}
+	return root
+}
+
+```
+
+###[problem236](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+```go
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	if root == nil || root.Val == p.Val || root.Val == q.Val {
+		return root
+	}
+
+	left := lowestCommonAncestor(root.Left,p,q)
+	right := lowestCommonAncestor(root.Right,p,q)
+
+	if left == nil {
+		return right
+	}
+	if right == nil {
+		return left
+	}
+
+	return root
+}
+
+```
+
+###[problem257](https://leetcode.com/problems/binary-tree-paths/)
+```go
+import "strconv"
+
+func binaryTreePaths(root *TreeNode) []string {
+	res := []string{}
+
+	if root == nil {
+		return res
+	}
+	helper(root,"",&res)
+	return res
+}
+
+func helper(root *TreeNode,path string,res*[]string)  {
+	path += strconv.Itoa(root.Val)
+	if root.Left == nil && root.Right == nil {
+		*res = append(*res,path)
+		return
+	}
+	path += "->"
+	if root.Left != nil {
+		helper(root.Left,path,res)
+	}
+	if root.Right != nil {
+		helper(root.Right,path,res)
+	}
+}
+
+```
+
+
+###[problem404](https://leetcode.com/problems/sum-of-left-leaves/)
+```go
+func sumOfLeftLeaves(root *TreeNode) int {
+	res := 0
+	if root == nil {
+		return res
+	}
+
+	sumOfLeftLeavesHelper(root,&res)
+
+	return res
+}
+
+func sumOfLeftLeavesHelper(root *TreeNode,res *int)  {
+	if root == nil {
+		return
+	}
+
+	if root.Left != nil && root.Left.Left == nil && root.Left.Right == nil {
+		*res += root.Left.Val
+	}
+
+	sumOfLeftLeavesHelper(root.Left,res)
+	sumOfLeftLeavesHelper(root.Right,res)
+}
+
+```
+
+
+###[problem429](https://leetcode.com/problems/n-ary-tree-level-order-traversal/)
+```go
+type Node struct {
+	Val int
+	Children []*Node
+}
+
+func levelOrder(root *Node) [][]int  {
+	res := [][]int{}
+	if root == nil {
+		return res 
+	}
+
+	var q []*Node 
+	q = append(q,root)
+
+	for len(q) > 0 {
+		lenght := len(q)
+		level := []int{}
+		
+		for i := 0; i < lenght; i++ {
+			node := q[0]
+			q = q[1:]
+			level= append(level,node.Val)
+
+			for _,v := range node.Children {
+				q = append(q,v)
+			}
+		}
+		if len(level) > 0 {
+			res = append(res,level)
+		}
+	}
+
+	return res	
+}
+
+
+```
+
+
+###[problem450](https://leetcode.com/problems/delete-node-in-a-bst/)
+```go
+func deleteNode(root *TreeNode, key int) *TreeNode {
+    if root == nil {
+        return nil
+    }
+    if root.Val == key {
+        if root.Left == nil {
+            return root.Right
+        } else if root.Right == nil {
+            return root.Left
+        }
+        left := root.Left
+        for left.Right != nil {
+            left = left.Right
+        }
+        left.Right = root.Right
+        root = root.Left 
+    } else if root.Val < key {
+        root.Right = deleteNode(root.Right,key)
+    } else if root.Val > key {
+        root.Left = deleteNode(root.Left,key)
+    } 
+    
+    return root
+}
+
+```
+
+
+###[problem501](https://leetcode.com/problems/find-mode-in-binary-search-tree/)
+```go
+func findMode(root *TreeNode) []int {
+	res := []int{}
+	if root == nil {
+		return res
+	}
+
+	dic := make(map[int]int)
+	inorder(root,&dic)
+	max := 0
+	for _,v := range dic {
+		if v > max {
+			max = v
+		}
+	}
+	for k,v := range dic {
+		if v == max {
+			res = append(res,k)
+		}
+	}
+
+	return res
+}
+
+func inorder(root *TreeNode, dic *map[int]int)  {
+	if root == nil {
+		return
+	}
+
+	inorder(root.Left,dic)
+	(*dic)[root.Val]++
+	inorder(root.Right,dic)
+}
+
+```
+
+
+###[problem513](https://leetcode.com/problems/find-bottom-left-tree-value/)
+```go
+func findBottomLeftValue(root *TreeNode) int {
+	res := -1
+	if root == nil {
+		return res
+	}
+
+	var q []*TreeNode
+	q = append(q,root)
+	for len(q) > 0 {
+		lenght := len(q)
+		level := []int{}
+
+		for i := 0; i< lenght; i++ {
+			node := q[0]
+			q = q[1:]
+			
+			level = append(level,node.Val)
+			if node.Left != nil {
+				q = append(q,node.Left)
+			}
+			if node.Right != nil {
+				q = append(q,node.Right)
+			}
+		}
+
+		if len(level) > 0 {
+			res = level[0]
+		}
+	}
+
+	return res
+}
+
+```
+
+###[problem515](https://leetcode.com/problems/find-largest-value-in-each-tree-row/)
+```go
+func largestValues(root *TreeNode) []int {
+	res := []int{}
+	if root == nil {
+		return res
+	}
+
+	var q []*TreeNode
+	q = append(q,root)
+	for len(q) > 0 {
+		length := len(q)
+		level := []int{}
+
+		for i := 0; i < length; i++ {
+			node := q[0]
+			q = q[1:]
+			level = append(level,node.Val)
+
+			if node.Left != nil {
+				q = append(q,node.Left)
+			}
+			if node.Right != nil {
+				q = append(q,node.Right)
+			}
+		}
+
+		maxValue := max(level)
+		res = append(res,maxValue)
+	}
+
+	return res
+}
+
+func max(level []int) int  {
+	if len(level) == 0 {
+		return -1
+	}
+
+	res := level[0]
+	for _,v := range level {
+		if v > res {
+			res = v
+		}
+	}
+
+	return res
+}
+
+```
+
+###[problem538](https://leetcode.com/problems/convert-bst-to-greater-tree/)
+```go
+func convertBST(root *TreeNode) *TreeNode {
+	sum := 0
+	inorder(root,&sum)
+	return root
+}
+
+func inorder(root *TreeNode,sum *int)  {
+	if root == nil {
+		return
+	}
+	inorder(root.Right,sum)
+	*sum = *sum + root.Val
+	root.Val = *sum
+	inorder(root.Left,sum)
+}
+
+```
+
+###[problem700](https://leetcode.com/problems/search-in-a-binary-search-tree/)
+```go
+func searchBST(root *TreeNode,val int) *TreeNode {
+	if root == nil {
+		return nil
+	}
+	if root.Val == val {
+		return root
+	} else if root.Val < val {
+		return searchBST(root.Right,val)
+	} else if root.Val > val {
+		return searchBST(root.Right,val)
+	}
+
+	return nil
+}
+
+```
+
+###[problem889](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/)
+```go
+func constructFromPrePost(pre []int, post []int) *TreeNode {
+    return buildTreeHelper(pre,post)
+}
+
+func buildTreeHelper(pre []int, post []int) *TreeNode {
+    if len(pre) == 0 || len(post) == 0 {
+        return nil
+    }
+    
+    if len(pre) == 1 || len(post) == 1 {
+        root := &TreeNode{}
+        root.Val = pre[0]
+        return root
+    }
+    
+    index := 0
+    for i,v := range post {
+        if v == pre[1] {
+            index = 1 + i
+        }
+    }
+    
+    root := &TreeNode{}
+    root.Val = pre[0]
+    root.Left = buildTreeHelper(pre[1:index+1],post[:index])
+    root.Right = buildTreeHelper(pre[index+1:],post[index:len(post)-1])
+    
+    return root
+}
+
+```
+
+###[problem938](https://leetcode.com/problems/range-sum-of-bst/)
+```go
+func rangeSumBST(root *TreeNode,low ,high int) int {
+	res := 0
+	if root == nil {
+		return res
+	}
+	if root.Val > low && root.Val > high {
+		return rangeSumBST(root.Left,low,high)
+	}else if root.Val < low && root.Val < high {
+		return rangeSumBST(root.Right,low,high)
+	}else if root.Val >= low && root.Val <= high {
+		res += root.Val
+		res += rangeSumBST(root.Right,low,high)
+		res += rangeSumBST(root.Left,low,high)
+	}
+
+	return res
+}
+
+```
+
+
+###[problem997](https://leetcode.com/problems/find-the-town-judge/)
+```go
+func findJudge(N int,trust [][]int) int {
+	if N == 1 {
+		return N
+	}
+
+	dic := make(map[int]int)
+	for _,v := range trust {
+		dic[v[1]]++
+	}
+
+	res := -1
+	for k,v := range dic {
+		if v == N-1 {
+			res  = k
+			break
+		}
+	}
+
+	if v > -1 {
+		for _,v := range trust {
+			if v[0] == res {
+				return -1 
+			}
+		}
+	}
+
+	return res
+}
+
+```
+
+###[problem1367](https://leetcode.com/problems/linked-list-in-binary-tree/)
+```go
+func isSubPath(head *ListNode,root *TreeNode) bool {
+	if head == nil {
+		return true
+	}
+	if root == nil {
+		return false
+	}
+
+	return isSubPathHelper(head,root) || isSubPath(head,root.Left) || isSubPath(head,root.Right)
+}
+
+func isSubPathHelper(head *ListNode,root *TreeNode) bool {
+	if head == nil {
+		return true
+	}
+	if root == nil && head != nil {
+		return false
+	}
+	if root.Val != head.Val {
+		return false
+	}
+
+	return isSubPathHelper(head.Next,root.Left) || isSubPathHelper(head.Next,root.Right) 
+}
+
+```
+
+
+
+## LeetCode Linked List
+
+###[problem328](https://leetcode.com/problems/odd-even-linked-list/)
+
+```go
+
+func oddEvenList(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+
+	odd,even,evenHead := head,head.Next,head.Next
+	for even != nil && even.Next != nil {
+		oddNext := even.Next 
+		odd.Next = oddNext
+		odd = odd.Next 
+
+		evenNext := odd.Next 
+		even.Next = evenNext 
+		even = even.Next 
+	}
+	odd.Next = evenHead
+
+	return head
+}
+
+// h
+// o, e, o, e, o, e, o
+// 2->1->3->5->6->4->7->NULL
+// 
+//2->3->6->7->1->5->4->NULL
+
+```

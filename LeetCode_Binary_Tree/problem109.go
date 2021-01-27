@@ -5,10 +5,7 @@ func sortedListToBST(head *ListNode) *TreeNode {
     if head == nil {
         return nil
     }
-    //           h
-    //head =   [-10,-3,0,5,9]
-    //                  h
-    //output = [0,-3,9,-10,null,5]
+    
     if head.Next == nil && head != nil {
         return &TreeNode{
             Val : head.Val,
@@ -50,9 +47,3 @@ func middleNodeAndPreNode(head *ListNode) (middle,pre *ListNode) {
     
     return p1,pre
 }
-
-//           p1
-//           p2         
-//head =   [-10,-3,0,5,9]
-//          pre p1      
-//output = [0,-3,9,-10,null,5]
