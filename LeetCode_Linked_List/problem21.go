@@ -1,3 +1,5 @@
+package LeetCode_Linked_List
+
 
 func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	pre := &ListNode{0,nil}
