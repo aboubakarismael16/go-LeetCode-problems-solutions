@@ -1224,6 +1224,329 @@ func isSubPathHelper(head *ListNode,root *TreeNode) bool {
 ```
 
 
+##LeetCode Binary Search
+
+###[problem33](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+
+```go
+func search(nums []int,target int) int {
+	if nums == nil || len(nums) == 0 {
+		return -1
+	}
+
+	left,right := 0,len(nums)-1
+	for left <= right {
+		mid := left + (right-left)/2
+		if nums[mid] == target {
+			return mid
+		} else if target >= nums[0] {
+			if nums[mid] < target && nums[0] <= nums[mid] {
+				left = mid + 1
+			} else {
+				right = mid - 1 
+			}
+		} else if target < nums[0] {
+			if nums[mid] < target || nums[0] <= nums[mid] {
+				left = mid + 1
+			} else {
+				right = mid - 1
+			}
+		}
+	}
+
+	return -1
+}
+
+```
+
+###[problem34](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+```go
+func searchRange(nums []int,target int) []int {
+	
+	return []int{searchRangeFirst(nums,target),searchRangeLast(nums,target)}
+}
+
+func searchRangeFirst(nums []int,target int) int {
+	left,right := 0,len(nums)-1
+	for left <= right {
+		mid := left + (right-left)/2
+		if nums[mid] > target {
+			right = mid - 1
+		} else if nums[mid] < target {
+			left = mid + 1
+		} else {
+			if (mid == 0) || (nums[mid-1] != target) {
+				return mid
+			}
+		} else {
+			right = mid - 1
+		}
+	}
+	return -1
+}
+
+func searchRangeLast(nums []int,target int) int {
+	left,right := 0,len(nums)-1
+	for left <= right {
+		mid := left + (right-left)/2
+		if nums[mid] > target {
+			right = mid - 1
+		} else if nums[mid] < target {
+			left = mid + 1
+		} else {
+			if (mid == len(nums)-1) || (nums[mid+1] != target) {
+				return mid
+			}
+		} else {
+			right = mid - 1
+		}
+	}
+	return -1
+}
+
+```
+
+
+###[problem35](https://leetcode.com/problems/search-insert-position/)
+
+```go
+func searchInsert(nums []int,target int) int {
+	if nums == nil || len(nums) == 0 {
+		return -1
+	}
+
+	left,right := 0, len(nums)-1
+	for left <= right {
+		mid := left + (right-left)/2
+
+		if nums[mid] == target {
+			return mid
+		} else if nums[mid] < target {
+			left = mid + 1
+		} else if nums[mid] > target {
+			right = mid -1
+		}
+	}
+
+	return left
+}
+
+```
+
+
+###[problem69](https://leetcode.com/problems/sqrtx/)
+
+```go
+// first method
+
+func mySqrt(x int) int {
+	if x <= 1 {
+		return x
+	}
+
+	left,right := 1,x
+	for left <= right {
+		mid = left + (right-left) / 2
+		if mid == x / mid {
+			return mid
+		} else if mid > x / mid {
+			right = mid - 1
+		} else {
+			left = mid +1
+		}
+	}
+	
+	return left - 1
+}
+
+//second method: Newton Iterative method
+
+// func mySqrt1(x int) int {
+// 	r := x
+// 	for r*r > x {
+// 		r = (r + x/r) / 2
+// 	}
+
+// 	return r
+// }
+
+```
+
+
+###[problem153](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+
+```go
+//first method
+func findMin(nums []int) int {
+	if nums == nil || len(nums) == 0 {
+		return -1
+	}
+
+	if nums[0] < nums[len(nums)-1] {
+		return nums[0]
+	}
+
+	left,right := 0,len(nums)-1
+	for left < right {
+		mid := left + (right-left)/2
+
+		if nums[mid] < nums[right] {
+			right = mid
+		} else if nums[mid] > nums[right] {
+			left = mid +1
+		}
+	}
+
+	return nums[left]
+}
+
+//second method
+
+func findMin2(nums []int) int {
+	min := nums[0]
+	for _,num := range nums[1:] {
+		if min > num {
+			min = num
+		}
+	}
+
+	return min
+
+```
+
+
+###[problem162](https://leetcode.com/problems/find-peak-element/)
+
+```go
+func findPeakElement(nums []int) int {
+	if nums == nil || len(nums) == 0 {
+		return -1
+	}
+	left,right := 0,len(nums)-1
+	for left < right {
+		mid := left + (right-left)/2
+
+		if nums[mid] > nums[mid+1] {
+			right = mid 
+		} else {
+			left = mid + 1
+		}
+	}
+
+	return left
+}
+
+```
+
+
+###[problem367](https://leetcode.com/problems/valid-perfect-square/)
+
+```go
+func isPerfectSquare(num int) bool {
+	if num == 0 {
+		return false
+	}
+	if num == 1 {
+		return true
+	}
+
+	left,right := 0,num
+	for left <= right {
+		mid := left + (right-left)/2
+		if mid == num/mid && num % mid == 0 {
+			return true
+		} else if mid == num / mid && num % mid > 0 {
+			left = mid +1
+		} else if mid < num / mid {
+			left = mid +1
+		} else if mid > num /mid {
+			right = mid - 1
+		}
+	}
+
+	return false
+}
+
+```
+
+
+###[problem374](https://leetcode.com/problems/guess-number-higher-or-lower/)
+
+```go
+func guessNumber(n int) int {
+	left,right := 1,n
+	for left <= right {
+		mid := left + (right-left) / 2
+		res := guess(mid)
+
+		if res == 0 {
+			return mid
+		} else if res == -1 {
+			right = mid -1
+		} else {
+			left = mid +1
+		}
+	}
+	
+	return -1
+}
+
+func guess
+
+```
+
+
+###[problem704](https://leetcode.com/problems/binary-search/)
+
+```go
+func search(nums []int,target int) int  {
+	if nums == nil || len(nums) == 0 {
+		return -1
+	}
+	
+	left,right := 0,len(nums)-1
+	for left <= right {
+		mid := left + (right - left) /2
+		if nums[mid] == target {
+			return mid
+		} else if nums[mid] > target {
+			right = mid -1
+		} else {
+			left = mid + 1
+		}
+	}
+
+	return -1
+}
+
+```
+
+###[problem744](https://leetcode.com/problems/find-smallest-letter-greater-than-target/)
+
+```go
+func nextGreatesLetter(letters []byte,target []byte) byte {
+	left,right := 0,len(letters)
+    for left < right {
+        mid := left + (right-left)/2
+        if letters[mid] <= target {
+            left = mid + 1
+        } else if letters[mid] > target {
+            right = mid
+        }
+    }
+    
+    if right >= len(letters) {
+        return letters[0]
+    }
+    return letters[right]
+}
+
+```
+
+
+
+
 
 ## LeetCode Linked List
 

@@ -17,13 +17,3 @@ func middleNode(head *ListNode) *ListNode {
 
 	return slow
 }
-
-```
-//[1,2,3,4,5] return 3
-//	   s
-//         f
-
-//[1,2,3,4,5,6] return 4
-//	   s
-//         f
-```
