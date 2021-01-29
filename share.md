@@ -1544,6 +1544,173 @@ func nextGreatesLetter(letters []byte,target []byte) byte {
 
 ```
 
+## LeetCode Array
+
+###[problem001](https://leetcode.com/problems/two-sum/)
+
+```go
+func TwoSum(nums []int,target int) []int  {
+	res :=[]int{-1,-1}
+
+	lookup := make(map[int]int)
+	for i, num := range nums {
+		temp := target - num 
+		if _,ok := lookup[temp]; ok {
+			res[0] = lookup[temp]
+			res[1] = i
+			return res
+		}
+		lookup[num] = i
+	}
+	return res
+	
+}
+
+```
+
+###[problem066](https://leetcode.com/problems/plus-one/)
+
+```go
+func plusOne(digits []int) []int {
+	res := make([]int,0)
+	if digits == nil || len(digits) == 0 {
+		return res
+	}
+
+	carry := 1
+	for i := len(digits)-1; i >= 0; i-- {
+		sum := digits[i] + carry
+		carry = sum / 10
+		digits[i] = sum % 10 
+	}
+	if carry == 1 {
+		res = []int{1}
+		digits = append(res,digits...)
+	}
+
+	return digits
+}
+
+```
+
+###[problem121](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
+
+```go
+func maxProfit(prices []int) int {
+	if prices == nil || len(prices) == 0 {
+		return 0
+	}
+
+	minPrice,maxProfit := prices[0],0
+	for i := 0; i < len(prices); i++ {
+		if prices[i] < minPrice {
+			minPrice = prices[i]
+		} else if (prices[i]-minPrice > maxProfit) {
+			maxProfit = prices[i] - minPrice
+		}
+	}
+
+	return maxProfit
+}
+
+```
+
+###[problem122](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/)
+
+```go
+func maxProfit(prices []int) int {
+	if prices == nil || len(prices) == 0 {
+		return 0
+	}
+	maxProfit := 0
+	for i := 1; i < len(prices); i++ {
+		if prices[i] > prices[i-1] {
+			maxProfit += prices[i] - prices[i-1]
+		}
+	}
+
+	return maxProfit
+}
+
+```
+
+###[problem169](https://leetcode.com/problems/majority-element/)
+
+```go
+func majorityElement(nums []int) int {
+	if len(nums) == 1 {
+		return nums[0]
+	}
+
+	threshold := 1 + len(nums)/2
+	m := make(map[int]int)
+	for i := 0; i < len(nums); i++ {
+		val,ok := m[nums[i]]
+		if ok {
+			val++
+			if val >= threshold {
+				return nums[i]
+			} else {
+				m[nums[i]] = val
+			}
+		} else {
+			m[nums[i]] = 1
+		}
+	}
+	return 0
+}
+
+// second method : O(n)
+
+func majorityElement1(nums []int) int {
+	m := make(map[int]int)
+	for _,v := range nums {
+		m[v]++
+		if m[v] > len(nums)/2 {
+			return v 
+		}
+	}
+
+	return 0
+}
+
+```
+
+###[problem389](https://leetcode.com/problems/find-the-difference/)
+
+```go
+func findTheDifference(s string,t string) byte {
+	var res byte
+	if len(s) >= len(t) {
+		return res
+	}
+	S := []byte(s)
+	T := []byte(t)
+
+	dic := make(map[byte]int)
+	for i := 0; i <len(S); i++ {
+		dic[S[i]]++
+	}
+	for i := 0; i < len(T); i++ {
+		val,ok := dic[T[i]]
+		if !ok {
+			res = T[i]
+			break
+		} else {
+			if val == 0 {
+				res = T[i]
+				break
+			}
+			dic[T[i]]--
+		}
+	}
+	return res
+}
+
+```
+
+
+
 
 
 
