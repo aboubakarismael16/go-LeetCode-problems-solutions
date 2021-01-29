@@ -6,7 +6,7 @@ func TwoSum(nums []int,target int) []int  {
 
 	lookup := make(map[int]int)
 	for i, num := range nums {
-		temp := target - num
+		temp := target - num 
 		if _,ok := lookup[temp]; ok {
 			res[0] = lookup[temp]
 			res[1] = i
