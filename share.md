@@ -1362,14 +1362,14 @@ func mySqrt(x int) int {
 
 //second method: Newton Iterative method
 
-// func mySqrt1(x int) int {
-// 	r := x
-// 	for r*r > x {
-// 		r = (r + x/r) / 2
-// 	}
+func mySqrt1(x int) int {
+	r := x
+	for r*r > x {
+		r = (r + x/r) / 2
+	}
 
-// 	return r
-// }
+	return r
+}
 
 ```
 
@@ -1748,3 +1748,181 @@ func oddEvenList(head *ListNode) *ListNode {
 //2->3->6->7->1->5->4->NULL
 
 ```
+
+
+## LeetCode String
+
+###[problem14](https://leetcode.com/problems/longest-common-prefix/)
+
+```go
+
+func longestCommonPrefix(strs []string) string {
+	if len(strs) == 0 {
+		return ""
+	}
+	if len(strs) == 1 {
+		return strs[0]
+	}
+
+	res := strs[0]
+	for i := 1; i < len(strs); i++ {
+		resLenght := len(res)
+		tempLength := len(strs[i])
+		length := min(resLenght,tempLength)
+		j := 0
+		for j < length {
+			if res[j] != strs[i][j] {
+				break
+			}
+			j++
+		}
+		res = res[:j]
+		if len(res) == 0 {
+			return ""
+		}
+	}
+	
+	return res
+}
+
+func min(a,b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+```
+
+###[problem58](https://leetcode.com/problems/length-of-last-word/)
+
+```go
+func LengthOfLastWord(s string) int {
+	if len(s) == 0 {
+		return 0
+	}
+
+	chars := []byte(s)
+	first := -1
+	for i := len(s)-1; i >= 0; i-- {
+		if first == -1 {
+			if chars[i] == ' ' {
+				continue
+			} else {
+				first = i 
+			}
+		} else {
+			if chars[i] == ' ' {
+				return first - i 
+			}
+		}
+	}
+
+	return first + 1
+}
+
+// "Hello World"
+// "Hello World        "
+// "a"
+// "      "
+// "  wwe  "
+```
+
+###[problem383](https://leetcode.com/problems/ransom-note/)
+
+```go
+func canConstruct(ransomNote string, magazine string) bool {
+	if len(ransomNote) > len(magazine) {
+		return false
+	}
+
+	r := []byte(ransomNote)
+	m := []byte(magazine)
+
+	dic := make(map[byte]int)
+	for i := 0; i < len(m); i++ {
+		dic[m[i]]++
+	}
+
+	for i := 0; i < len(r); i++ {
+		val,ok := dic[r[i]]
+		if ok {
+			if val == 0 {
+				return false 
+			} else {
+				dic[r[i]]--
+			}
+		} else {
+			return false
+		}
+	}
+
+	return true
+}
+```
+
+###[problem1374](https://leetcode.com/problems/generate-a-string-with-characters-that-have-odd-counts/)
+
+```go
+func generateTheString(n int) string {
+	if n == 0 {
+		return ""
+	}
+	if n % 2 == 0 {
+		// pair
+		return buildString(n-1) + "b"
+	} else {
+		//impair
+		return buildString(n)
+	}
+}
+
+func buildString(n int) string  {
+	res := ""
+	for i := 0; i < n ; i++ {
+		res += "a"
+	}
+
+	return res 
+}
+```
+
+###[problem1422](https://leetcode.com/problems/maximum-score-after-splitting-a-string/)
+
+```go
+func maxScore(s string) int {
+	res := 0
+	if len(s) == 0 {
+		return 0
+	}
+
+	left := 0
+	if s[0] == '0' {
+		left = 1
+	}
+
+	right := 0
+	for i := 1; i < len(s); i++ {
+		if s[i] == '1' {
+			right++
+		}
+	}
+
+	res = left + right
+	for i := 1; i < len(s)-1; i++ {
+		if s[i] == '0' {
+			left++
+		}
+		if s[i] == '1' {
+			right--
+		}
+		temp := left + right
+		if temp > res {
+			res = temp
+		}
+	}
+	
+	return res
+}
+```
+
