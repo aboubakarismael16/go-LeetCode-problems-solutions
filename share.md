@@ -1921,7 +1921,7 @@ func maxScore(s string) int {
 			res = temp
 		}
 	}
-	
+
 	return res
 }
 ```
