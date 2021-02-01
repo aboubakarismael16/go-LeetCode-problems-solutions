@@ -1717,6 +1717,159 @@ func findTheDifference(s string,t string) byte {
 
 ## LeetCode Linked List
 
+###[problem002](https://leetcode.com/problems/add-two-numbers/)
+
+```go
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	pre := &ListNode{0,nil}
+	cur := pre
+	carry := 0
+	
+
+	for l1 != nil || l2 != nil {
+		a,b := 0,0
+		if l1 != nil {
+			a = l1.Val
+			l1 = l1.Next
+		}
+		if l2 != nil {
+			b = l2.Val
+			l2 = l2.Next
+		}
+
+		sum := a + b + carry
+		carry = sum / 10
+		sum = sum % 10
+
+		cur.Next = &ListNode{sum,nil}
+		cur = cur.Next
+
+		// if l1 != nil {
+		// 	l1 = l1.Next
+		// }
+		// if l2 != nil {
+		// 	l2 =l2.Next
+		// }
+	}
+
+	if carry == 1 {
+		cur.Next = &ListNode{carry,nil}
+	}
+
+	return pre.Next
+
+}
+
+```
+
+###[problem19](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+
+```go
+func removeNthFromEnd(head *ListNode, n int) *ListNode {
+	pre := &ListNode{0,nil}
+	pre.Next = head
+	left := pre
+	right := pre
+
+	for i := 0; i < n+1; i++ {
+		right = right.Next
+	}
+	for right != nil {
+		right = right.Next
+		left = left.Next
+	}
+	left.Next = left.Next.Next
+
+	return pre.Next
+}
+
+```
+
+###[problem21](https://leetcode.com/problems/merge-two-sorted-lists/)
+
+```go
+
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+	pre := &ListNode{0,nil}
+	cur := pre
+
+	for l1 != nil && l2 != nil {
+		temp := l1.Val
+		if l1.Val > l2.Val {
+			temp = l2.Val
+		}
+		cur.Next = &ListNode{temp,nil}
+		cur = cur.Next
+
+		if l1.Val > l2.Val {
+			l2 = l2.Next
+		} else {
+			l1 = l1.Next
+		}
+	}
+
+	if l1 != nil {
+		cur.Next = l1
+	}
+	if l2 != nil {
+		cur.Next = l2
+	}
+
+	return pre.Next
+}
+
+```
+
+###[problem23](https://leetcode.com/problems/merge-k-sorted-lists/)
+
+```go
+
+func mergeKLists(lists []*ListNode) *ListNode {
+	length := len(lists)
+	if length < 1 {
+		return nil
+	}
+	if length == 1 {
+		return lists[0]
+	}
+
+	num := length / 2
+	left := mergeKLists(lists[:num])
+	right := mergeKLists(lists[num:])
+
+	return Helper(left,right)
+}
+
+func Helper(l1 *ListNode, l2 *ListNode) *ListNode {
+	if l1 == nil {
+		return l2
+	}
+	if l2 == nil {
+		return l1
+	}
+	if l1.Val < l2.Val {
+		l1.Next = Helper(l1.Next,l2)
+		return l1
+	}
+	l2.Next = Helper(l1,l2.Next)
+	return l2
+}
+
+```
+
+###[problem]()
+
+```go
+
+```
+
+###[problem]()
+
+```go
+
+```
+
+
 ###[problem328](https://leetcode.com/problems/odd-even-linked-list/)
 
 ```go
@@ -1793,6 +1946,7 @@ func min(a,b int) int {
 }
 
 ```
+
 
 ###[problem58](https://leetcode.com/problems/length-of-last-word/)
 

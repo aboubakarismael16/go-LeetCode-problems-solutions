@@ -1,6 +1,6 @@
 package LeetCode_Linked_List
 
-func mergeKLists(lists *ListNode) *ListNode {
+func mergeKLists(lists []*ListNode) *ListNode {
 	length := len(lists)
 	if length < 1 {
 		return nil
