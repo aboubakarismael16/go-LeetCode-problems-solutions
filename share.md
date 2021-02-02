@@ -1857,6 +1857,85 @@ func Helper(l1 *ListNode, l2 *ListNode) *ListNode {
 
 ```
 
+###[problem24](https://leetcode.com/problems/swap-nodes-in-pairs/)
+
+```go
+
+func swapPairs(head *ListNode) *ListNode {
+    if head == nil {
+		return nil
+	}
+
+	dummy := &ListNode{-1,head}
+	pre := dummy
+	cur := head
+	for cur != nil && cur.Next != nil {
+		next := cur.Next
+		nextNext := next.Next
+
+		pre.Next = next
+		next.Next = cur
+		cur.Next = nextNext
+
+		pre = cur
+		cur = cur.Next
+	}
+
+	return dummy.Next
+}
+
+```
+
+###[problem25](https://leetcode.com/problems/reverse-nodes-in-k-group/submissions/)
+
+```go
+
+func reverseKGroup(head *ListNode, k int) *ListNode {
+	node := head
+	for i := 0; i < k; i++ {
+		if node == nil {
+			return head
+		}
+		node = node.Next 
+	} 
+	newHead := reverse(head,node)
+	head.Next = reverseKGroup(node,k)
+
+	return newHead
+}
+
+func reverse(first *ListNode, last *ListNode) *ListNode {
+	pre := last
+	for first != last {
+		temp := first.Next
+		first.Next = pre
+		pre = first
+		first = temp
+	}
+
+	return pre
+}
+
+```
+
+###[problem]()
+
+```go
+
+```
+
+###[problem]()
+
+```go
+
+```
+
+###[problem]()
+
+```go
+
+```
+
 ###[problem]()
 
 ```go
