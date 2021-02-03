@@ -1951,9 +1951,110 @@ func rotateRight(head *ListNode, k int) *ListNode {
 
 ```
 
-###[problem]()
+###[problem82](https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/)
 
 ```go
+
+func deleteDuplicates(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+    dummy := &ListNode{-1,head}
+	pre := dummy
+	cur := head
+	for cur != nil && cur.Next != nil {
+		if cur.Val != cur.Next.Val {
+			cur = cur.Next
+            pre = pre.Next
+            continue
+		} 
+        for cur != nil && cur.Next != nil && cur.Val == cur.Next.Val {
+            cur = cur.Next
+        }
+        cur = cur.Next
+        pre.Next = cur
+	}
+
+	return dummy.Next
+}
+
+```
+
+###[problem83](https://leetcode.com/problems/remove-duplicates-from-sorted-list/)
+
+```go
+
+func deleteDuplicates(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+
+	pre := &ListNode{-1,head}
+	cur := head
+	for cur != nil && cur.Next != nil {
+		if cur.Val == cur.Next.Val {
+			cur.Next = cur.Next.Next
+		} else {
+			cur = cur.Next 
+		}
+	}
+
+	return pre.Next
+}
+
+```
+
+###[problem141](https://leetcode.com/problems/linked-list-cycle/)
+
+```go
+
+func hasCycle(head *ListNode) bool {
+	if head == nil {
+		return false
+	}
+
+	slow,fast := head,head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+		if slow == fast {
+			return true
+		}
+	}
+
+	return false
+}
+
+```
+
+###[problem142](https://leetcode.com/problems/linked-list-cycle-ii/)
+
+```go
+
+func detectCycle(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	}
+	slow,fast := head,head
+
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+		if slow == fast {
+			break
+		}	
+	}
+	if fast == nil || fast.Next == nil {
+		return nil
+	}
+	third := head
+	for third != slow {
+		slow = slow.Next
+		third = third.Next
+	}
+
+	return slow
+}
 
 ```
 
@@ -1963,17 +2064,27 @@ func rotateRight(head *ListNode, k int) *ListNode {
 
 ```
 
-###[problem]()
-
-```go
-
-```
 
 ###[problem]()
 
 ```go
 
 ```
+
+
+###[problem]()
+
+```go
+
+```
+
+
+###[problem]()
+
+```go
+
+```
+
 
 
 ###[problem328](https://leetcode.com/problems/odd-even-linked-list/)
