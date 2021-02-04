@@ -2058,34 +2058,128 @@ func detectCycle(head *ListNode) *ListNode {
 
 ```
 
-###[problem]()
+###[problem160](https://leetcode.com/problems/intersection-of-two-linked-lists/)
 
 ```go
+
+func getIntersectionNode(headA,headB *ListNode) *ListNode {
+	if headA == nil || headB == nil {
+		return nil
+	}
+
+	a,b := headA,headB
+	for a != b {
+		if a == nil {
+			a = headB
+		} else {
+			a = a.Next
+		}
+
+		if b == nil {
+			b = headA
+		} else {
+			b = b.Next
+		}
+	}
+
+	return b
+}
 
 ```
 
 
-###[problem]()
+###[problem206](https://leetcode.com/problems/reverse-linked-list/)
 
 ```go
+
+func reverseList(head *ListNode) *ListNode {
+	var behind *ListNode
+	for head != nil {
+		next := head.Next
+		head.Next = behind 
+		behind = head 
+		head = next 
+	}
+
+	return behind
+}
 
 ```
 
 
-###[problem]()
+###[problem234](https://leetcode.com/problems/palindrome-linked-list/)
 
 ```go
+
+func isPalindrome(head *ListNode) bool {
+	if head == nil {
+		return true
+	}
+
+	slow,fast := head,head
+	var pre *ListNode
+	for fast.Next != nil && fast.Next.Next != nil {
+		fast = fast.Next.Next
+
+		next := slow.Next
+		slow.Next = pre 
+		pre = slow
+		slow = next 
+	}
+
+	var left *ListNode
+	var right *ListNode
+
+	if fast.Next == nil {
+		left = pre
+		right = slow.Next
+	} else {
+		right = slow.Next
+		slow.Next = pre
+		left = slow
+	}
+
+	for left != nil && right != nil {
+		if left.Val != right.Val {
+			return false
+		}
+		left = left.Next 
+		right = right.Next 
+	}
+
+	return true
+}
 
 ```
 
 
-###[problem]()
+###[problem237](https://leetcode.com/problems/delete-node-in-a-linked-list/)
 
 ```go
 
+//first method
+func deleteNode(node *ListNode) {
+	node.Val = node.Next.Val
+	node.Next = node.Next.Next 
+}
+
+//second method
+
+func deleteNode(node *ListNode) {
+    if node == nil {
+        return
+    }
+	
+    cur := node
+    for cur.Next.Next != nil {
+        cur.Val = cur.Next.Val
+        cur = cur.Next
+    }
+    cur.Val = cur.Next.Val
+    cur.Next = nil
+}
+
 ```
-
-
 
 ###[problem328](https://leetcode.com/problems/odd-even-linked-list/)
 
@@ -2116,6 +2210,57 @@ func oddEvenList(head *ListNode) *ListNode {
 // 2->1->3->5->6->4->7->NULL
 // 
 //2->3->6->7->1->5->4->NULL
+
+```
+
+###[problem876](https://leetcode.com/problems/middle-of-the-linked-list/)
+
+```go
+
+//First method
+func middleNode(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+
+	slow,fast := head,head
+	for fast.Next != nil && fast.Next.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+
+	if fast.Next != nil && fast.Next.Next == nil {
+		slow = slow.Next
+	}
+
+	return slow
+}
+
+//Second method
+func middleNode(head *ListNode) *ListNode {
+    if head == nil || head.Next == nil {
+		return head
+	}
+
+	p1,p2 := head,head
+	for p2.Next != nil && p2.Next.Next != nil {
+		p1 = p1.Next
+		p2 = p2.Next.Next
+
+	}
+
+	length := 0
+	cur := head
+	for cur != nil {
+		length++
+		cur = cur.Next
+	}
+	if length % 2 == 0 {
+		return p1.Next
+	}
+
+	return p1
+}
 
 ```
 
