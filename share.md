@@ -1439,6 +1439,108 @@ func findPeakElement(nums []int) int {
 
 ```
 
+###[problem275](https://leetcode.com/problems/h-index-ii/)
+
+```go
+
+func hIndex(citations []int) int {
+	if len(citations) == 0 {
+		return 0
+	}
+
+	left,right := 0,len(citations)-1
+	for left <= right {
+		mid := left + (right-left)/2
+		if len(citations)-mid > citations[mid] {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+
+	return len(citations) - left
+}
+
+```
+
+###[problem278](https://leetcode.com/problems/first-bad-version/)
+
+```go
+
+/** 
+ * Forward declaration of isBadVersion API.
+ * @param   version   your guess about first bad version
+ * @return 	true if current version is bad 
+ *		false if current version is good
+ * func isBadVersion(version int) bool;
+ */
+
+func firstBadVersion(n int) int {
+    if n == 0 {
+		return 1
+	}
+
+	left,right := 0,n 
+	for left < right {
+		mid := left + (right-left)/2
+		if isBadVersion(mid) {
+			right = mid
+		} else {
+			left = mid + 1
+		}
+	}
+
+	return left
+}
+
+```
+
+
+###[problem287](https://leetcode.com/problems/find-the-duplicate-number/)
+
+```go
+// first method
+func findDuplicate(nums []int) int {
+    left,right := 0,len(nums)-1
+    for left < right {
+        mid := left + (right-left)/2
+        count := 0
+        for _,num := range nums {
+            if num <= mid {
+                count++
+            }
+        }
+        if count > mid {
+            right = mid
+        } else {
+            left = mid + 1
+        }
+    }
+    
+    return left
+}
+
+// second method
+func findDuplicate(nums []int) int {
+    
+    slow,fast := nums[0],nums[nums[0]]
+    for fast != slow {
+        slow = nums[slow]
+        fast = nums[nums[fast]]
+    }
+    
+    walker := 0
+    for walker != slow {
+        walker = nums[walker]
+        slow = nums[slow]
+    }
+    
+    return walker
+}
+
+```
+
+
 
 ###[problem367](https://leetcode.com/problems/valid-perfect-square/)
 
@@ -2087,6 +2189,31 @@ func getIntersectionNode(headA,headB *ListNode) *ListNode {
 
 ```
 
+###[problem203](https://leetcode.com/problems/remove-linked-list-elements/)
+
+```go
+func removeElements(head *ListNode, val int) *ListNode {
+	if head == nil || val == 0 {
+		return head 
+	}
+
+	newHead := &ListNode{0,head}
+	pre := newHead
+	cur := head 
+	for cur != nil {
+		if cur.Val == val {
+			pre.Next = cur.Next
+		} else {
+			pre = cur
+		}
+
+		cur = cur.Next
+	}
+
+	return newHead.Next 
+}
+
+```
 
 ###[problem206](https://leetcode.com/problems/reverse-linked-list/)
 
