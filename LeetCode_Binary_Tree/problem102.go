@@ -25,10 +25,9 @@ func levelOrder(root *TreeNode) [][]int  {
 			if node.Right != nil {
 				q = append(q,node.Right)
 			}
-
-			for len(level) > 0 {
-				res = append(res,level)
-			}
+		}
+		if len(level) > 0 {
+			res = append(res, level)
 		}
 	}
 
