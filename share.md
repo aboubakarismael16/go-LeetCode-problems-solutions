@@ -232,7 +232,7 @@ func zigzagLevelOrder(root *TreeNode) [][]int {
 			node := q[0]
 			q = q[1:]
             
-            level = append(level,node.Val)
+			level = append(level,node.Val)
 
 			if node.Left != nil {
 				q = append(q,node.Left)
