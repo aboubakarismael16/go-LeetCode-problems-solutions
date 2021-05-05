@@ -5,15 +5,15 @@ func oddEvenList(head *ListNode) *ListNode {
 		return head
 	}
 
-	odd,even,evenHead := head,head.Next,head.Next
+	odd, even, evenHead := head, head.Next, head.Next
 	for even != nil && even.Next != nil {
-		oddNext := even.Next 
+		oddNext := even.Next
 		odd.Next = oddNext
-		odd = odd.Next 
+		odd = odd.Next
 
-		evenNext := odd.Next 
-		even.Next = evenNext 
-		even = even.Next 
+		evenNext := odd.Next
+		even.Next = evenNext
+		even = even.Next
 	}
 	odd.Next = evenHead
 
