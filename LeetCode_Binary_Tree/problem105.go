@@ -50,7 +50,7 @@ func buildTree2(preorder []int, inorder []int) *TreeNode {
 }
 
 //recursion
-func buildTree(preorder []int, inorder []int) *TreeNode {
+func buildTree3(preorder []int, inorder []int) *TreeNode {
 	if len(preorder) == 0 || len(inorder) == 0 {
 		return nil
 	}
