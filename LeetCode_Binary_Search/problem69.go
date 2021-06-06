@@ -7,28 +7,28 @@ func mySqrt(x int) int {
 		return x
 	}
 
-	left,right := 1,x
+	left, right := 1, x
 	for left <= right {
-		mid = left + (right-left) / 2
-		if mid == x / mid {
+		mid = left + (right-left)/2
+		if mid == x/mid {
 			return mid
-		} else if mid > x / mid {
+		} else if mid > x/mid {
 			right = mid - 1
 		} else {
-			left = mid +1
+			left = mid + 1
 		}
 	}
-	
+
 	return left - 1
 }
 
-//second method: Newton Iterative method
+// second method: Newton Iterative method
 
-// func mySqrt1(x int) int {
-// 	r := x
-// 	for r*r > x {
-// 		r = (r + x/r) / 2
-// 	}
+func mySqrt1(x int) int {
+	r := x
+	for r*r > x {
+		r = (r + x/r) / 2
+	}
 
-// 	return r
-// }
+	return r
+}
