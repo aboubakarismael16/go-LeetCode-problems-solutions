@@ -49,7 +49,7 @@ func isSymmetric(root *TreeNode) bool {
 
 // second method
 
-func isSymmetric(root *TreeNode) bool {
+func isSymmetric2(root *TreeNode) bool {
 	if root == nil {
 		return true
 	}
